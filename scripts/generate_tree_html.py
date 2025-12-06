@@ -21,8 +21,10 @@ class HtmlTreeGenerator:
 
 
         self.all_files = {}
+        self.all_folders = []
         
         self.get_all_files_in_dir(self.root_directory)
+        self.create_tree_structure()
     
     def get_all_files_in_dir(self, current_dir):
         for path in Path(current_dir).rglob('*'):
@@ -34,7 +36,14 @@ class HtmlTreeGenerator:
                 else:
                     self.all_files[path.name] = relative_path_string
             if path.is_dir():
+                if path != self.root_directory:
+                    self.all_folders.append(path.relative_to(self.root_directory))
                 self.get_all_files_in_dir(path)
+    
+    def create_tree_structure(self):
+        for file_name in self.all_files:
+            print(file_name)
+        return
 
 
 
@@ -44,4 +53,7 @@ if __name__ == "__main__":
     print(directory)
     root_directory = Path(directory)
     generator = HtmlTreeGenerator(root_directory)
+    print(generator.all_files)
+    print(generator.all_folders)
+
     
